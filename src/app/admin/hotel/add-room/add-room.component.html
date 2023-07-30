@@ -1,0 +1,26 @@
+<form class="formgrid grid" [formGroup]="newRoomForm">
+  <div class="field col-12">
+    <label class="font-semibold" for="cost">Cost</label>
+    <p-inputNumber prefix="$" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" formControlName="cost" id="cost" styleClass="w-full" class="w-full"></p-inputNumber>
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="tax">Tax</label>
+    <p-inputNumber suffix="%" formControlName="tax" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" id="tax" styleClass="w-full" class="w-full"></p-inputNumber>
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="capacity">Capacity</label>
+    <p-inputNumber formControlName="capacity" id="capacity" styleClass="w-full" class="w-full"></p-inputNumber>
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="type">Room type / Category</label>
+    <p-dropdown class="flex w-full" styleClass="w-full" formControlName="type" id="type" [options]="roomTypes" optionLabel="name" optionValue="value"></p-dropdown>
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="location">Location</label>
+    <textarea placeholder="Example: 1st Floor (Room #123)" formControlName="location" id="location" type="text" rows="4" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+  </div>
+  <div class="flex flex-column col-12 gap-2 justify-content-end">
+    <p-button label="Create" styleClass="w-full" [disabled]="newRoomForm.invalid" (onClick)="submitForm()"></p-button>
+    <p-button label="Cancel" styleClass="p-button-outlined w-full" (onClick)="close()"></p-button>
+  </div>
+</form>

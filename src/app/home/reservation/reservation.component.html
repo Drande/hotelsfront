@@ -1,0 +1,36 @@
+<div class="flex flex-row gap-3 flex-wrap align-items-center justify-content-center px-4 py-3">
+  <div class="flex flex-column gap-1">
+    <label class="font-semibold px-1">Arrival date</label>
+    <p-calendar [(ngModel)]="arrivalDate" [readonlyInput]="true" (ngModelChange)="handleSearchChange({ arrivalDate })"></p-calendar>
+  </div>
+  <div class="flex flex-column gap-1">
+    <label class="font-semibold px-1">Depart date</label>
+    <p-calendar [(ngModel)]="departDate" [readonlyInput]="true" (ngModelChange)="handleSearchChange({ departDate })"></p-calendar>
+  </div>
+  <div class="flex flex-column gap-1">
+    <label class="font-semibold px-1">Number of guests</label>
+    <p-inputNumber inputId="integeronly" [(ngModel)]="numberOfGuests" (ngModelChange)="handleSearchChange({ numberOfGuests })"></p-inputNumber>
+  </div>
+  <div class="flex flex-column gap-1">
+    <label class="font-semibold px-1">Search by city / hotel name</label>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" placeholder="Search" pInputText [(ngModel)]="searchValue" (ngModelChange)="handleSearchChange({ globalSearch: searchValue })" />
+    </span>
+  </div>
+</div>
+<p-divider styleClass="m-0 p-0"></p-divider>
+<div class="flex flex-row flex-wrap gap-4 p-4">
+  <ng-container *ngFor="let hotel of availableHotels">
+    <div class="flex flex-column gap-1 border-round-md shadow-2 cursor-pointer card" (click)="viewHotel(hotel)">
+      <div class="card-image-wrapper">
+        <img class="image" [src]="imageUrl">
+      </div>
+      <div class="flex flex-column gap-1 px-2 py-1">
+        <span class="font-semibold text-xl text-overflow-ellipsis overflow-hidden white-space-nowrap">{{hotel.name}}</span>
+        <span>{{hotel.country}} <i class="pi pi-map-marker"></i></span>
+        <p class="address-placeholder">{{hotel.address}}</p>
+      </div>
+    </div>
+  </ng-container>
+</div>

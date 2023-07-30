@@ -1,0 +1,20 @@
+<ng-container *ngIf="availableRooms">
+  <div class="flex flex-column gap-4 px-4 py-3">
+    <p-button class="w-min" label="Return" (onClick)="returnToHotelList()"></p-button>
+    <div class="flex flex-row gap-4 flex-wrap">
+      <ng-container *ngFor="let room of availableRooms">
+        <div class="flex flex-column gap-1 border-round-md shadow-2 cursor-pointer card" (click)="viewRoom(room)">
+          <div class="card-image-wrapper">
+            <img class="image" [src]="imageUrl">
+          </div>
+          <div class="flex flex-column gap-1 px-2 py-1">
+            <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">{{room.location}}</span>
+            <span>{{roomTypesNames[room.type]}}</span>
+            <span>Capacity: {{room.capacity}}</span>
+            <span>Total cost: {{room.cost + (0.01 * room.tax * room.cost)}}$</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,112 @@
+<div class="flex flex-column gap-4 py-3 px-4 w-full">
+  <p-button class="w-min" label="Return" (onClick)="returnToHotelView()"></p-button>
+  <ng-container *ngIf="room">
+    <div class="flex flex-row flex-wrap justify-content-center gap-4">
+      <div class="border-round-lg overflow-hidden shadow-2 image-wrapper">
+        <img class="image" [src]="imageUrl">
+      </div>
+      <div class="flex flex-grow-1">
+        <div class="flex flex-column gap-2">
+          <div class="flex flex-row gap-2 align-items-center">
+            <span class="font-semibold text-3xl">Details</span>
+            <i *ngIf="!editing" class="pi pi-pencil cursor-pointer" (click)="enableEdit()"></i>
+            <i *ngIf="editing" class="pi pi-times cursor-pointer" (click)="cancelEdit()"></i>
+          </div>
+          <ng-container *ngIf="editing else displayTemplate">
+            <form class="formgrid grid p-2" [formGroup]="roomForm">
+              <div class="field col-12">
+                <label class="font-semibold" for="cost">Cost</label>
+                <p-inputNumber prefix="$" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" formControlName="cost" id="cost" styleClass="w-full" class="w-full"></p-inputNumber>
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="tax">Tax</label>
+                <p-inputNumber suffix="%" formControlName="tax" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" id="tax" styleClass="w-full" class="w-full"></p-inputNumber>
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="capacity">Capacity</label>
+                <p-inputNumber formControlName="capacity" id="capacity" styleClass="w-full" class="w-full"></p-inputNumber>
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="type">Room type / Category</label>
+                <p-dropdown class="flex w-full" styleClass="w-full" formControlName="type" id="type" [options]="roomTypes" optionLabel="name" optionValue="value"></p-dropdown>
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="location">Location</label>
+                <textarea placeholder="Example: 1st Floor (Room #123)" formControlName="location" id="location" type="text" rows="4" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+              </div>
+              <div class="flex flex-column col-12 gap-2 justify-content-end">
+                <p-button label="Save" styleClass="w-full" [disabled]="roomForm.invalid" (onClick)="submitEdits()"></p-button>
+                <p-button label="Cancel" styleClass="p-button-outlined w-full" (onClick)="cancelEdit()"></p-button>
+              </div>
+            </form>
+          </ng-container>
+          <ng-template #displayTemplate>
+            <div class="flex flex-column gap-2 p-2">
+              <label class="font-semibold">Cost</label>
+              <span class="text-base">{{room.cost}}$</span>
+              <label class="font-semibold">Tax</label>
+              <span class="text-base">{{room.tax}}%</span>
+              <label class="font-semibold">Type</label>
+              <span class="text-base">{{roomTypesNames[room.type]}}</span>
+              <label class="font-semibold">Location</label>
+              <span class="text-base">{{room.location}}</span>
+              <p-chip class="cursor-pointer w-min select-none" [styleClass]="'text-white font-semibold ' + (room.enabled == true ? 'bg-green-500' : 'bg-red-500')" [label]="room.enabled ? 'Enabled' : 'Disabled'" tooltipPosition="top" [pTooltip]="room.enabled ? 'Disable' : 'Enable'" (click)="toggleRoomState()"></p-chip>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <p-table #dt [columns]="columns" [value]="room.reservations" class="shadow-1 border-round-lg overflow-hidden"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption" let-columns>
+      <span class="text-2xl">Reservations</span>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [colSpan]="columns.length">
+          <div class="flex flex-row justify-content-center">
+            <span class="text-2xl">No records</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                <ng-container [ngSwitch]="col.type">
+                  <ng-container *ngSwitchCase="'date'">
+                    <span class="font-semibold">{{ rowData[col.field] | date: 'yyyy-MM-dd' }}</span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'count'">
+                    <span>{{ rowData[col.field].length ?? 0 }}</span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'boolean'">
+                    <span class="font-semibold">{{ rowData[col.field] ? 'Yes' : 'No' }}</span>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>{{ rowData[col.field] }}</ng-container>
+                </ng-container>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+  <!-- <div class="flex flex-row gap-2 align-items-center">
+    <span class="font-semibold text-3xl">Reservations ({{room.reservations.length}})</span>
+  </div>
+  <div class="flex flex-row gap-4 flex-wrap">
+    <ng-container *ngFor="let reservation of room.reservations">
+      <div class="flex flex-column gap-1 border-round-md shadow-2 cursor-pointer card px-2 py-1">
+        <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">{{reservation.arrivalDate | date: 'yyyy-mm-dd'}}</span>
+        <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">{{reservation.departDate | date: 'yyyy-mm-dd'}}</span>
+        <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">{{reservation.guests.length}}$</span>
+      </div>
+    </ng-container>
+  </div> -->
+</div>

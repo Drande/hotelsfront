@@ -1,0 +1,71 @@
+<div class="flex flex-column gap-4 py-3 px-4 w-full">
+  <p-button class="w-min" label="Return" (onClick)="returnToHotelsView()"></p-button>
+  <ng-container *ngIf="hotel">
+    <div class="flex flex-row flex-wrap justify-content-center gap-4">
+      <div class="border-round-lg overflow-hidden shadow-2 image-wrapper">
+        <img class="image" [src]="imageUrl">
+      </div>
+      <div class="flex flex-grow-1">
+        <div class="flex flex-column gap-2">
+          <div class="flex flex-row gap-2 align-items-center">
+            <span class="font-semibold text-3xl">Details</span>
+            <i *ngIf="!editing" class="pi pi-pencil cursor-pointer" (click)="enableEdit()"></i>
+            <i *ngIf="editing" class="pi pi-times cursor-pointer" (click)="cancelEdit()"></i>
+          </div>
+          <ng-container *ngIf="editing else displayTemplate">
+            <form class="formgrid grid p-2" [formGroup]="hotelForm">
+              <div class="field col-12">
+                <label class="font-semibold" for="name">Name</label>
+                <input formControlName="name" id="name" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="country">Country</label>
+                <p-dropdown class="flex w-full" styleClass="w-full" formControlName="country" id="country" [options]="countries" optionLabel="name" optionValue="value"></p-dropdown>
+              </div>
+              <div class="field col-12">
+                <label class="font-semibold" for="address">Address</label>
+                <textarea formControlName="address" id="address" type="text" rows="4" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+              </div>
+              <div class="flex flex-column col-12 gap-2 justify-content-end">
+                <p-button label="Save" styleClass="w-full" [disabled]="hotelForm.invalid" (onClick)="submitEdits()"></p-button>
+                <p-button label="Cancel" styleClass="p-button-outlined w-full" (onClick)="cancelEdit()"></p-button>
+              </div>
+            </form>
+          </ng-container>
+          <ng-template #displayTemplate>
+            <div class="flex flex-column gap-2 p-2">
+              <label class="font-semibold">Name</label>
+              <span class="text-base">{{hotel.name}}</span>
+              <label class="font-semibold">Country</label>
+              <span class="text-base">{{hotel.country}}</span>
+              <label class="font-semibold">Address</label>
+              <span class="text-base">{{hotel.address}}</span>
+              <p-chip class="cursor-pointer w-min select-none" [styleClass]="'text-white font-semibold ' + (hotel.enabled == true ? 'bg-green-500' : 'bg-red-500')" [label]="hotel.enabled ? 'Enabled' : 'Disabled'" tooltipPosition="top" [pTooltip]="hotel.enabled ? 'Disable' : 'Enable'" (click)="toggleHotelState()"></p-chip>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <div class="flex flex-row gap-2 align-items-center justify-content-between">
+    <span class="font-semibold text-3xl">Rooms ({{hotel.rooms.length}})</span>
+    <p-button (onClick)="addRoom()" label="Add room"></p-button>
+  </div>
+  <div class="flex flex-row gap-4 flex-wrap">
+    <ng-container *ngFor="let room of hotel.rooms">
+      <div class="flex flex-column gap-1 border-round-md shadow-2 cursor-pointer card" (click)="viewRoom(room)">
+        <div class="card-image-wrapper">
+          <img class="image" [src]="imageUrl">
+        </div>
+        <div class="flex flex-column gap-1 px-2 py-1">
+          <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">Located at: {{room.location}}</span>
+          <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">Type: {{roomTypesNames[room.type]}}</span>
+          <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">Cost: {{room.cost}}$</span>
+          <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">Tax: {{room.tax}}%</span>
+          <p-chip class="w-min select-none align-self-end" [styleClass]="'text-white font-semibold ' + (room.enabled == true ? 'bg-green-500' : 'bg-red-500')"
+          [label]="room.enabled ? 'Enabled' : 'Disabled'"></p-chip>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

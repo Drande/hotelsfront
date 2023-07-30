@@ -2,3 +2,39 @@
 body {
   font-family: var(--font-family);
 }
+
+.responsive-dialog {
+  max-width: 95%;
+  width: min(50%, 32rem);
+}
+
+.form-dialog {
+  width: 95%;
+  height: 95%;
+}
+
+/* Cards and edit view images */
+.image-wrapper {
+  width: 24rem;
+  height: 32rem;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-image-wrapper {
+  width: 100%;
+  height: 12rem;
+  background-color: #EEE;
+  & > img {
+    object-fit: contain;
+  }
+}
+
+.card {
+  width: 16rem;
+}

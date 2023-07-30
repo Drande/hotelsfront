@@ -1,0 +1,44 @@
+<p-table #dt [columns]="columns" [value]="hotels" [globalFilterFields]="filterFields"
+  [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="caption">
+    <div class="flex flex-row gap-2 flex-wrap justify-content-between align-items-center">
+      <span class="font-semibold text-3xl">Hotels</span>
+      <div class="flex flex-row gap-2 flex-wrap">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="applyGlobalFilter($event, dt)" placeholder="Search keyword" />
+        </span>
+        <!-- Table actions -->
+        <p-button label="Add new hotel" (onClick)="createHotel()"></p-button>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+      <tr>
+          <th *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+          <th style="width: 6rem">
+            Actions
+          </th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+          <td *ngFor="let col of columns">
+              <ng-container [ngSwitch]="col.type">
+                <ng-container *ngSwitchCase="'boolean'"><span class="font-semibold">{{ rowData[col.field] ? 'Yes' : 'No' }}</span></ng-container>
+                <ng-container *ngSwitchDefault>{{ rowData[col.field] }}</ng-container>
+              </ng-container>
+          </td>
+          <td>
+            <div class="flex flex-row gap-2 justify-content-center">
+              <i *ngIf="!rowData.enabled" class="pi pi-eye cursor-pointer" pTooltip="Enable" tooltipPosition="top" (click)="toggleHotelState(rowData)"></i>
+              <i *ngIf="rowData.enabled" class="pi pi-eye-slash cursor-pointer" pTooltip="Disable" tooltipPosition="top" (click)="toggleHotelState(rowData)"></i>
+              <i class="pi pi-pencil cursor-pointer" pTooltip="View" tooltipPosition="top" (click)="viewHotel(rowData)"></i>
+              <i class="pi pi-times cursor-pointer" pTooltip="Delete" tooltipPosition="top" (click)="deleteHotel(rowData)"></i>
+            </div>
+          </td>
+      </tr>
+  </ng-template>
+</p-table>

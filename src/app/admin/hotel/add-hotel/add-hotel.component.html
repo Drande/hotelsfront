@@ -1,0 +1,18 @@
+<form class="formgrid grid" [formGroup]="newHotelForm">
+  <div class="field col-12">
+    <label class="font-semibold" for="name">Name</label>
+    <input formControlName="name" id="name" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="country">Country</label>
+    <p-dropdown class="flex w-full" styleClass="w-full" formControlName="country" id="country" [options]="countries" optionLabel="name" optionValue="value"></p-dropdown>
+  </div>
+  <div class="field col-12">
+    <label class="font-semibold" for="address">Address</label>
+    <textarea formControlName="address" id="address" type="text" rows="4" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+  </div>
+  <div class="flex flex-column col-12 gap-2 justify-content-end">
+    <p-button label="Create" styleClass="w-full" [disabled]="newHotelForm.invalid" (onClick)="submitForm()"></p-button>
+    <p-button label="Cancel" styleClass="p-button-outlined w-full" (onClick)="close()"></p-button>
+  </div>
+</form>

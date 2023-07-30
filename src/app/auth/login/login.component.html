@@ -1,5 +1,8 @@
-<div class="shadow-3 border-radius-4 px-6 py-4 m-auto min-w-12rem max-w-24rem w-full gap-4 flex flex-column align-items-center">
-  <span class="font-semibold text-3xl">Login</span>
+<div class="shadow-3 border-round-lg px-6 py-4 m-auto min-w-12rem max-w-24rem w-full gap-4 flex flex-column align-items-center">
+  <div class="flex flex-row gap-2 align-items-center">
+    <span class="font-semibold text-3xl">Login</span>
+    <i class="pi pi-exclamation-circle text-2xl" tooltipPosition="top" pTooltip="Use any email and any password of at least 6 characters to access, add 'admin' word to the email to access as an administrator"></i>
+  </div>
   <form class="formgrid grid gap-2" [formGroup]="loginForm">
     <div class="field col-12 m-0">
       <label class="font-semibold" for="username">Email</label>

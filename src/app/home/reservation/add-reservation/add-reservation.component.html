@@ -1,0 +1,80 @@
+<form class="formgrid grid" [formGroup]="reservationForm">
+  <div class="flex flex-row gap-2 flex-wrap w-full py-2 align-items-center justify-content-between">
+    <span class="font-bold text-2xl">Guests</span>
+    <p-button *ngIf="guestForms.length < room.capacity" label="Add guest" styleClass="p-button-sm" (onClick)="addGuest()"></p-button>
+    <p-button *ngIf="guestForms.length >= room.capacity" [disabled]="true" tooltipPosition="top" pTooltip="Room capcity reached" label="Add guest" styleClass="p-button-sm"></p-button>
+  </div>
+  <ng-container *ngFor="let guestForm of guestForms.controls; let i=index;" [formGroup]="guestForm">
+    <div class="flex flex-row gap-2 flex-wrap w-full py-2 align-items-center">
+      <p-button (onClick)="removeGuest(i)" icon="pi pi-times" styleClass="p-button-text p-button-danger p-button-rounded"></p-button>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="firstName">Firstname</label>
+      <input formControlName="firstName" id="firstName" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="lastName">Lastname</label>
+      <input formControlName="lastName" id="lastName" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="birthDate">Birth date</label>
+      <p-calendar appendTo="body" formControlName="birthDate" id="birthDate" styleClass="w-full" inputStyleClass="p-2" class="w-full" [readonlyInput]="true"></p-calendar>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="gender">Gender</label>
+      <p-dropdown class="flex w-full form-dropdown" styleClass="w-full" [readonly]="false" formControlName="gender" id="gender" [options]="genders" optionLabel="name" optionValue="value">
+      </p-dropdown>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="documentType">Document Type</label>
+      <p-dropdown class="flex w-full form-dropdown" styleClass="w-full" formControlName="documentType" id="documentType" [options]="documentTypes" optionLabel="name" optionValue="value">
+      </p-dropdown>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="documentNumber">Document number</label>
+      <input formControlName="documentNumber" id="documentNumber" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="email">Email</label>
+      <input formControlName="email" id="email" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-3">
+      <label class="font-semibold" for="phoneNumber">Phone number</label>
+      <input formControlName="phoneNumber" id="phoneNumber" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <p-divider class="w-full"></p-divider>
+  </ng-container>
+  <ng-container formGroupName="emergencyContact">
+    <div class="flex flex-row gap-2 flex-wrap w-full py-2 align-items-center">
+      <span class="font-bold text-2xl">Emergency contact</span>
+    </div>
+    <div class="field col-12 md:col-4">
+      <label class="font-semibold" for="firstName">Firstname</label>
+      <input formControlName="firstName" id="firstName" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-4">
+      <label class="font-semibold" for="lastName">Lastname</label>
+      <input formControlName="lastName" id="lastName" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <div class="field col-12 md:col-4">
+      <label class="font-semibold" for="phoneNumber">Phone number</label>
+      <input formControlName="phoneNumber" id="phoneNumber" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+    </div>
+    <p-divider class="w-full"></p-divider>
+  </ng-container>
+  <div class="flex flex-row gap-2 flex-wrap w-full py-2 align-items-center">
+    <span class="font-bold text-2xl">Arrival and depart</span>
+  </div>
+  <div class="field col-12 md:col-6">
+    <label class="font-semibold px-1">Arrival date</label>
+    <p-calendar appendTo="body" class="w-full" styleClass="w-full" inputStyleClass="p-2" formControlName="arrivalDate" [readonlyInput]="true"></p-calendar>
+  </div>
+  <div class="field col-12 md:col-6">
+    <label class="font-semibold px-1">Depart date</label>
+    <p-calendar appendTo="body" class="w-full" styleClass="w-full" inputStyleClass="p-2" formControlName="departDate" [readonlyInput]="true"></p-calendar>
+  </div>
+  <div class="flex flex-column col-12 gap-2 justify-content-end">
+    <p-button label="Create" styleClass="w-full" [disabled]="reservationForm.invalid" (onClick)="submitForm()"></p-button>
+    <p-button label="Cancel" styleClass="p-button-outlined w-full" (onClick)="close()"></p-button>
+  </div>
+</form>
